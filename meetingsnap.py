@@ -13,6 +13,7 @@ import queue
 
 root = tkinter.Tk()
 # root.geometry('800x160+400+300')
+root.minsize(width=400, height=200)
 root.resizable(False, False)
 root.title("截图程序状态：zzz")
 savePath = ""
@@ -56,7 +57,7 @@ def get_resource_path(relative_path):
 def stopCapture():
     try:
         q.put("False", block=False)
-        root.title("截图程序状态：摆烂ing～闲出屁～ 💨 ")
+        root.title("摆烂ing～闲出屁～ 💨 ")
     except:
         pass
 
@@ -146,7 +147,7 @@ class MyCapture:
             lastPic = None
             lastHash = 0
             currentHash = 0
-            root.title("截图程序状态：搬砖ing～累出屎～ 💩 ")
+            root.title("搬砖ing～累出屎～ 💩 ")
             while 1:
                 left, right = sorted([self.X.get(), event.x])
                 top, bottom = sorted([self.Y.get(), event.y])
@@ -167,7 +168,7 @@ class MyCapture:
                         break
                 except:
                     pass
-            root.title("截图程序状态：摆烂ing～闲出屁～ 💨 ")
+            root.title("摆烂ing～闲出屁～ 💨 ")
             _thread.exit()
 
         def onLeftButtonUp(event):
