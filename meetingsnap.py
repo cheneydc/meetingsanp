@@ -1,5 +1,6 @@
 import tkinter
 import os
+import sys
 import time
 from PIL import ImageGrab, Image, ImageTk
 from tkinter import Label, Entry, filedialog, messagebox
@@ -47,6 +48,11 @@ def getDirectory():
     pathLabel = Label(root, text=savePath)
     pathLabel.grid(row=1, column=1, columnspan=4)
 
+def get_resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
 def stopCapture():
     try:
         q.put("False", block=False)
@@ -68,7 +74,7 @@ buttonCapture.grid(row=2,ipadx=30)
 buttonStop = tkinter.Button(root, text='停    止', command=stopCapture)
 buttonStop.grid(row=2, column=1,ipadx=30)
 
-qcode = Image.open("./qcode.jpg")
+qcode = Image.open(get_resource_path("./qcode.jpg"))
 qcodeImg = ImageTk.PhotoImage(qcode.resize((120, 130)))
 qcodeLabel = Label(root, image=qcodeImg)
 qcodeLabel.grid(row=3, column=1, ipadx=10)
