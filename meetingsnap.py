@@ -19,67 +19,6 @@ root.title("截图程序状态：zzz")
 savePath = ""
 q = queue.Queue(1)
 
-def buttonCaptureClick():
-    savePath = ""
-    for widget in root.winfo_children():
-        if isinstance(widget, Label):
-            savePath = savePath + widget['text']
-
-    if savePath.strip() == "会议名称:":
-        messagebox.showwarning("给我反省！！！","上面的信息给我写明白！！！")
-        return
-
-    root.state('icon')
-
-    sleep(0.1)
-
-    filename = 'temp.png'
-    im = ImageGrab.grab()
-    im.save(filename)
-    im.close()
-
-    w = MyCapture(filename)
-    buttonCapture.wait_window(w.top)
-
-def getDirectory():
-    savePath = filedialog.askdirectory(title = "选择存储目录")
-    if platform.system().lower() == "windows":
-        savePath = savePath.replace("/", "\\")
-        
-    pathLabel = Label(root, text=savePath)
-    pathLabel.grid(row=1, column=1, columnspan=4)
-
-def get_resource_path(relative_path):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.join(os.path.abspath("."), relative_path)
-
-def stopCapture():
-    try:
-        q.put("False", block=False)
-        root.title("摆烂ing～闲出屁～ 💨 ")
-    except:
-        pass
-
-meetingNameLabel = Label(root, text="会议名称:")
-meetingNameLabel.grid(row=0)
-
-meetingNameEntry = Entry(root)
-meetingNameEntry.grid(row=0, column=1, columnspan=3)
-
-buttonChooseDir = tkinter.Button(root, text="选择目录", command=getDirectory)
-buttonChooseDir.grid(row=1, ipadx=30)
-
-buttonCapture = tkinter.Button(root, text='开始截图', command=buttonCaptureClick)
-buttonCapture.grid(row=2,ipadx=30)
-buttonStop = tkinter.Button(root, text='停    止', command=stopCapture)
-buttonStop.grid(row=2, column=1,ipadx=30)
-
-qcode = Image.open(get_resource_path("./qcode.jpg"))
-qcodeImg = ImageTk.PhotoImage(qcode.resize((120, 130)))
-qcodeLabel = Label(root, image=qcodeImg)
-qcodeLabel.grid(row=3, column=1, ipadx=10)
-
 class MyCapture:
     def __init__(self, png) -> None:
         # 记录鼠标位置
@@ -159,7 +98,7 @@ class MyCapture:
                     lastHash = imagehash.average_hash(lastPic)
                     currentHash = imagehash.average_hash(pic)
 
-                if lastPic == None or abs(lastHash-currentHash)>10:
+                if lastPic == None or abs(lastHash-currentHash)>6:
                     pic.save(filename)
                     lastPic = pic
                 sleep(1)
@@ -185,5 +124,66 @@ class MyCapture:
 
         self.canvas.bind('<ButtonRelease-1>', onLeftButtonUp)
         self.canvas.pack(fill=tkinter.BOTH, expand=tkinter.YES)
+
+def buttonCaptureClick():
+    savePath = ""
+    for widget in root.winfo_children():
+        if isinstance(widget, Label):
+            savePath = savePath + widget['text']
+
+    if savePath.strip() == "会议名称:":
+        messagebox.showwarning("给我反省！！！","上面的信息给我写明白！！！")
+        return
+
+    root.state('icon')
+
+    sleep(0.1)
+
+    filename = 'temp.png'
+    im = ImageGrab.grab()
+    im.save(filename)
+    im.close()
+
+    w = MyCapture(filename)
+    buttonCapture.wait_window(w.top)
+
+def getDirectory():
+    savePath = filedialog.askdirectory(title = "选择存储目录")
+    if platform.system().lower() == "windows":
+        savePath = savePath.replace("/", "\\")
+        
+    pathLabel = Label(root, text=savePath)
+    pathLabel.grid(row=1, column=1, columnspan=4)
+
+def get_resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+def stopCapture():
+    try:
+        q.put("False", block=False)
+        root.title("摆烂ing～闲出屁～ 💨 ")
+    except:
+        pass
+
+meetingNameLabel = Label(root, text="会议名称:")
+meetingNameLabel.grid(row=0)
+
+meetingNameEntry = Entry(root)
+meetingNameEntry.grid(row=0, column=1, columnspan=3)
+
+buttonChooseDir = tkinter.Button(root, text="选择目录", command=getDirectory)
+buttonChooseDir.grid(row=1, ipadx=30)
+
+buttonCapture = tkinter.Button(root, text='开始截图', command=buttonCaptureClick)
+buttonCapture.grid(row=2,ipadx=30)
+buttonStop = tkinter.Button(root, text='停    止', command=stopCapture)
+buttonStop.grid(row=2, column=1,ipadx=30)
+
+qcode = Image.open(get_resource_path("./qcode.jpg"))
+qcodeImg = ImageTk.PhotoImage(qcode.resize((120, 130)))
+qcodeLabel = Label(root, image=qcodeImg)
+qcodeLabel.grid(row=3, column=1, ipadx=10)
 
 root.mainloop()
