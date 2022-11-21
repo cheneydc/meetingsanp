@@ -197,5 +197,12 @@ qcode = Image.open(get_resource_path("./qcode.jpg"))
 qcodeImg = ImageTk.PhotoImage(qcode.resize((120, 130)))
 qcodeLabel = Label(root, image=qcodeImg)
 qcodeLabel.grid(row=3, column=1, ipadx=10)
+qcode.close()
+
+howtouse = Image.open(get_resource_path("./howtouse.jpg"))
+howtouseImg = ImageTk.PhotoImage(howtouse.resize((220, 130)))
+howtouseLabel = Label(root, image=howtouseImg)
+howtouseLabel.grid(row=3, column=0, ipadx=10)
+howtouse.close()
 
 root.mainloop()
