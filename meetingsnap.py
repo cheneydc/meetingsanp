@@ -89,9 +89,9 @@ class MyCapture:
                                                     self.Y.get(),
                                                     event.x,
                                                     event.y,
-                                                    outline='darkgray',
-                                                    width=3,
-                                                    dash=(6,6))
+                                                    outline='yellow',
+                                                    width=6,
+                                                    dash=(10,10))
         self.canvas.bind('<B1-Motion>', onLeftButtonMove)
 
         def capImage(event):
