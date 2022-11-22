@@ -65,16 +65,6 @@ class MyCapture:
 
         self.canvas.bind('<Button-1>', onLeftButtonDown)
 
-        # def create_rectangle(x1, y1, x2, y2, **kwargs):
-        #     if 'alpha' in kwargs:
-        #         alpha = int(kwargs.pop('alpha') * 255)
-        #         fill = kwargs.pop('fill')
-        #         fill = root.winfo_rgb(fill) + (alpha,)
-        #         image = Image.new('RGBA', (x2-x1, y2-y1), fill)
-        #         images.append(ImageTk.PhotoImage(image))
-        #         self.canvas.create_image(x1, y1, image=images[-1], anchor='nw')
-        #     self.canvas.create_rectangle(x1, y1, x2, y2, **kwargs)
-
         def onLeftButtonMove(event):
             if not self.sel:
                 return
@@ -89,7 +79,7 @@ class MyCapture:
                                                     self.Y.get(),
                                                     event.x,
                                                     event.y,
-                                                    outline='yellow',
+                                                    outline='blue',
                                                     width=6,
                                                     dash=(10,10))
         self.canvas.bind('<B1-Motion>', onLeftButtonMove)
