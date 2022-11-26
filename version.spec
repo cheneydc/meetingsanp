@@ -3,5 +3,5 @@ CompanyName: Cheney Dong
 FileDescription: 会议自动截图
 InternalName: Meetingsnap
 LegalCopyright: © cheneydc@gmail.com. All rights reserved.
-OriginalFilename: 会议自动截图.exe
+OriginalFilename: meetingsnap.exe
 ProductName: Meetingsnap
