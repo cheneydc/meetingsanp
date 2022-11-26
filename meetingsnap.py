@@ -176,6 +176,12 @@ def stopCapture():
     except:
         pass
 
+try:
+    ico = Image.open(get_resource_path("meetingsnap.png"))
+    icoImg = ImageTk.PhotoImage(ico)
+    root.iconphoto(False, icoImg)
+except:
+    pass
 meetingNameLabel = Label(root, text="会议名称:")
 meetingNameLabel.grid(row=0, column=0, padx=5, pady=5, sticky=W+E)
 
