@@ -1,23 +1,27 @@
 import tkinter
 import os
+import io
 import sys
 import time
-from PIL import ImageGrab, Image, ImageTk
-from tkinter import Label, Entry, filedialog, messagebox
-from time import sleep
-from pathlib import Path
 import _thread
 import platform
-import imagehash
 import queue
+from imagehash import average_hash
+from PIL import ImageGrab, Image, ImageTk
+from ttkbootstrap import Style
+from tkinter import Label, Entry, filedialog, messagebox, ttk, E, W
+from time import sleep
+from urllib.request import urlopen
 
 root = tkinter.Tk()
-# root.geometry('800x160+400+300')
-root.minsize(width=400, height=200)
+# root.minsize(width=400, height=200)
 root.resizable(False, False)
 root.title("截图程序状态：zzz")
+root.config(bg="lightgrey")
 savePath = ""
 q = queue.Queue(1)
+
+style = Style(theme="simplex")
 
 class MyCapture:
     def __init__(self, png) -> None:
@@ -68,7 +72,6 @@ class MyCapture:
         def onLeftButtonMove(event):
             if not self.sel:
                 return
-
             global lastDraw
             try:
                 self.canvas.delete(lastDraw) 
@@ -85,6 +88,10 @@ class MyCapture:
         self.canvas.bind('<B1-Motion>', onLeftButtonMove)
 
         def capImage(event):
+            try:
+                q.get(block=False)
+            except:
+                pass
             lastPic = None
             lastHash = 0
             currentHash = 0
@@ -97,8 +104,8 @@ class MyCapture:
                 filename = os.path.join(os.sep, savePath, self.namePrefix + self.nameSuffix)
 
                 if lastPic != None:
-                    lastHash = imagehash.average_hash(lastPic)
-                    currentHash = imagehash.average_hash(pic)
+                    lastHash = average_hash(lastPic)
+                    currentHash = average_hash(pic)
 
                 if lastPic == None or abs(lastHash-currentHash)>8:
                     pic.save(filename)
@@ -170,29 +177,42 @@ def stopCapture():
         pass
 
 meetingNameLabel = Label(root, text="会议名称:")
-meetingNameLabel.grid(row=0)
+meetingNameLabel.grid(row=0, column=0, padx=5, pady=5, sticky=W)
 
 meetingNameEntry = Entry(root)
-meetingNameEntry.grid(row=0, column=1, columnspan=3)
+meetingNameEntry.grid(row=0, column=1, columnspan=2,  padx=5, pady=5, sticky=W+E)
 
-buttonChooseDir = tkinter.Button(root, text="选择目录", command=getDirectory)
-buttonChooseDir.grid(row=1, ipadx=30)
+buttonChooseDir = ttk.Button(root, style='info.TButton', text="选择目录", command=getDirectory)
+buttonChooseDir.grid(row=1, padx=5, pady=5, sticky=W)
 
-buttonCapture = tkinter.Button(root, text='开始截图', command=buttonCaptureClick)
-buttonCapture.grid(row=2,ipadx=30)
-buttonStop = tkinter.Button(root, text='停    止', command=stopCapture)
-buttonStop.grid(row=2, column=1,ipadx=30)
+buttonCapture = ttk.Button(root, style='info.TButton', text='开始截图', command=buttonCaptureClick)
+buttonCapture.grid(row=2,padx=5, pady=5, sticky=W)
+buttonStop = ttk.Button(root, style='primary.TButton', text='停    止', command=stopCapture)
+buttonStop.grid(row=2, column=1, padx=5, pady=5)
 
 qcode = Image.open(get_resource_path("./qcode.jpg"))
 qcodeImg = ImageTk.PhotoImage(qcode.resize((120, 130)))
 qcodeLabel = Label(root, image=qcodeImg)
-qcodeLabel.grid(row=3, column=1, ipadx=10)
+qcodeLabel.grid(row=3, column=2, padx=5, pady=5, sticky=W+E)
 qcode.close()
 
 howtouse = Image.open(get_resource_path("./howtouse.jpg"))
 howtouseImg = ImageTk.PhotoImage(howtouse.resize((220, 130)))
 howtouseLabel = Label(root, image=howtouseImg)
-howtouseLabel.grid(row=3, column=0, ipadx=10)
+howtouseLabel.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky=W+E)
 howtouse.close()
+
+url = "https://meetingsnap.oss-cn-beijing.aliyuncs.com/ads/test.jpg"
+try:
+    image_bytes = urlopen(url, timeout=2).read()
+    data_stream = io.BytesIO(image_bytes)
+    ad = Image.open(data_stream)
+    adImg = ImageTk.PhotoImage(ad.resize((380, 100)))
+    adLabel = Label(root, image=adImg)
+    adLabel.grid(row=4, column=0, columnspan=3, padx=5, pady=5, sticky=W+E)
+    ad.close()
+    # root.geometry("%dx%d" % (root.winfo_width(), root.winfo_height()))
+except:
+    pass
 
 root.mainloop()
